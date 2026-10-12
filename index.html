@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>InkPad — Digital Notepad</title>
+<meta name="description" content="Professional multi-page digital notepad: handwriting, shapes, PDF annotation, image import and file resizer." />
+<meta name="theme-color" content="#1a56db" />
+<link rel="manifest" href="manifest.json" />
+<link rel="icon" type="image/png" href="assets/icon-192.png" />
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+<link rel="stylesheet" href="css/style.css?v=12" />
+<!-- PDF.js (rendering) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+  if (window.pdfjsLib) {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  }
+</script>
+<!-- PDF-Lib (export annotated PDF) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#workspace">Skip to workspace</a>
+
+<!-- ══════════ MAIN LAYOUT ══════════ -->
+<div id="layout">
+
+
+  <!-- CENTER: workspace -->
+  <main id="workspace" tabindex="-1" aria-label="Notebook workspace">
+    <div id="canvas-scroll">
+      <div id="paper-wrap">
+        <div id="paper">
+          <canvas id="main-canvas" aria-label="Notebook page canvas. Use pen tools to draw."></canvas>
+          <canvas id="overlay-canvas" aria-hidden="true"></canvas>
+          <!-- FLOATING tool options popup (opens on tool select, closes on canvas click) -->
+          <div id="tool-popup" hidden role="dialog" aria-label="Tool options">
+            <div class="popup-head">
+              <strong id="popup-title">Pen options</strong>
+              <button id="popup-close" type="button" class="tbtn" aria-label="Close options" title="Close (click canvas to close)">×</button>
+            </div>
+            <div id="popup-shapes" class="pop-block" hidden>
+              <div class="tool-divider"><span>2D Shapes</span></div>
+              <div class="tool-group shapes-grid" role="toolbar" aria-label="2D shapes">
+                <button class="tool shape-btn" data-tool="shape-line" title="Line" aria-label="Line">╱</button>
+                <button class="tool shape-btn" data-tool="shape-arrow" title="Arrow" aria-label="Arrow">→</button>
+                <button class="tool shape-btn" data-tool="shape-rect" title="Rectangle" aria-label="Rectangle">▭</button>
+                <button class="tool shape-btn" data-tool="shape-roundrect" title="Rounded rectangle" aria-label="Rounded rectangle">▢</button>
+                <button class="tool shape-btn" data-tool="shape-circle" title="Circle" aria-label="Circle">○</button>
+                <button class="tool shape-btn" data-tool="shape-ellipse" title="Ellipse" aria-label="Ellipse">⬭</button>
+                <button class="tool shape-btn" data-tool="shape-triangle" title="Triangle" aria-label="Triangle">△</button>
+                <button class="tool shape-btn" data-tool="shape-polygon" title="Polygon (hexagon)" aria-label="Polygon">⬡</button>
+                <button class="tool shape-btn" data-tool="shape-star" title="Star" aria-label="Star">★</button>
+                <button class="tool shape-btn" data-tool="shape-freeform" title="Freeform (double-click to finish)" aria-label="Freeform">〰</button>
+              </div>
+              <div class="tool-divider"><span>3D-style</span></div>
+              <div class="tool-group shapes-grid" role="toolbar" aria-label="3D style shapes">
+                <button class="tool shape-btn" data-tool="shape-cube" title="Cube (3D-style, shaded)" aria-label="Cube">⬢</button>
+                <button class="tool shape-btn" data-tool="shape-cuboid" title="Cuboid (3D-style)" aria-label="Cuboid">▤</button>
+                <button class="tool shape-btn" data-tool="shape-cylinder" title="Cylinder (3D-style)" aria-label="Cylinder">🛢</button>
+                <button class="tool shape-btn" data-tool="shape-cone" title="Cone (3D-style)" aria-label="Cone">🔻</button>
+                <button class="tool shape-btn" data-tool="shape-sphere" title="Sphere (3D-style gradient)" aria-label="Sphere">●</button>
+                <button class="tool shape-btn" data-tool="shape-pyramid" title="Pyramid (3D-style)" aria-label="Pyramid">▲</button>
+              </div>
+            </div>
+            <div id="props-pen" class="prop-block">
+                <div class="prop-row color-row">
+                  <span class="prop-label" id="lbl-color">Color</span>
+                  <span class="row">
+                    <span id="color-presets" class="swatches" role="group" aria-labelledby="lbl-color"></span>
+                    <input id="prop-color" type="color" value="#1a1a1a" aria-label="Custom color" title="Custom color" />
+                  </span>
+                </div>
+                <div class="prop-row thickness-row">
+                  <label for="prop-width">Thickness: <output id="prop-width-val" for="prop-width">4 px</output></label>
+                  <input id="prop-width" type="range" min="1" max="15" value="4" step="1" aria-label="Stroke thickness" />
+                </div>
+                <div class="row two">
+                  <div class="prop-row"><label for="prop-min">Min</label><input id="prop-min" type="number" min="1" max="15" value="1" aria-label="Minimum thickness" /></div>
+                  <div class="prop-row"><label for="prop-max">Max</label><input id="prop-max" type="number" min="1" max="15" value="15" aria-label="Maximum thickness" /></div>
+                </div>
+                <div class="opacity-box">
+                  <div class="opacity-title">Opacity preview</div>
+                  <div class="prop-row opacity-row">
+                    <label for="prop-opacity">Opacity: <output id="prop-opacity-val" for="prop-opacity">100%</output></label>
+                    <input id="prop-opacity" type="range" min="10" max="100" value="100" step="5" aria-label="Stroke opacity" />
+                  </div>
+                  <div id="stroke-preview-wrap" aria-hidden="true"><canvas id="stroke-preview" width="220" height="52"></canvas></div>
+                </div>
+            </div>
+
+            <div id="props-shape" class="prop-block" hidden>
+                <label>Outline color <input id="shape-stroke" type="color" value="#1a56db" /></label>
+                <label>Fill color <input id="shape-fill" type="color" value="#bfdbfe" /></label>
+                <label class="check"><input id="shape-fill-on" type="checkbox" checked /> Fill shape</label>
+                <label>Outline width: <output id="shape-width-val">3 px</output>
+                  <input id="shape-width" type="range" min="1" max="30" value="3" />
+                </label>
+                <label>Fill opacity: <output id="shape-opacity-val">100%</output>
+                  <input id="shape-opacity" type="range" min="10" max="100" value="100" step="5" />
+                </label>
+            </div>
+
+          </div>
+          <!-- STUCK inside the white page: 10px margins, fixed on zoom in/out -->
+          <div id="float-bar">
+            <div id="float-pages">
+            <button class="btn nav-btn" data-nav="prev" title="Previous page (←)" aria-label="Previous page">‹</button>
+            <button id="btn-add-page" class="btn nav-btn" title="Add new page" aria-label="Add new page">+</button>
+            <button class="btn nav-btn" data-nav="next" title="Next page (→)" aria-label="Next page">›</button>
+            <button id="btn-pages" class="btn" aria-haspopup="true" aria-expanded="false" title="Page list — open thumbnails"><span class="h-lines" aria-hidden="true"><i></i><i></i><i></i></span><span id="pages-count">1/1</span></button>
+            <div id="pages-popup" hidden role="dialog" aria-label="Pages">
+              <section id="pages-panel" aria-label="Pages">
+                <div class="pages-head">
+                  <h2>Pages</h2>
+                  <div class="row">
+                    <button id="btn-sel-all" class="btn small" title="Select / deselect all pages">☑ All</button>
+                    <button id="btn-del-selected" class="btn small danger-btn" title="Delete ticked pages" disabled>🗑 Sel</button>
+                  </div>
+                </div>
+                <div id="thumbs" role="listbox" aria-label="Page thumbnails"></div>
+                <div class="save-block">
+                  <div class="tool-divider"><span>Save</span></div>
+                  <div class="row save-row">
+                    <button id="btn-save" class="btn small primary" title="Save current page as PNG">💾 Save</button>
+                    <button id="btn-save-as" class="btn small" title="Save as — choose format" aria-haspopup="true" aria-expanded="false">📑 Save as…</button>
+                  </div>
+                  <div id="saveas-options" hidden>
+                    <button id="saveas-pdf" class="btn small">📕 PDF (all pages)</button>
+                    <button id="saveas-png" class="btn small">🖼 PNG (this page)</button>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+
+          <div id="float-toolbar" role="toolbar" aria-label="Drawing tools">
+            <button class="tool icon-only active" data-tool="pencil" title="Pencil (P)" aria-label="Pencil" aria-pressed="true">✏</button>
+            <button class="tool icon-only" data-tool="eraser" title="Eraser (E)" aria-label="Eraser" aria-pressed="false">🧽</button>
+            <button class="tool icon-only" data-tool="select" title="Select / Move / Resize (V)" aria-label="Select" aria-pressed="false">➤</button>
+            <button id="btn-shapes" class="tool icon-only" title="Shapes — click to open all 2D & 3D shapes" aria-label="Shapes" aria-pressed="false" aria-haspopup="true"><span id="shapes-glyph" aria-hidden="true">▭</span></button>
+            <button id="btn-clear-page" class="tool icon-only danger" title="Clear current page (asks first)" aria-label="Clear page">🗑</button>
+            <button id="btn-import" class="tool icon-only" title="Import — image, PDF, link, backup" aria-label="Import" aria-haspopup="true" aria-expanded="false">📥</button>
+          </div>
+
+          <div id="import-popup" hidden role="menu" aria-label="Import options">
+            <button id="imp-image" class="btn small" role="menuitem">🖼 Image…</button>
+            <button id="imp-pdf" class="btn small" role="menuitem">📄 PDF…</button>
+            <button id="imp-url" class="btn small" role="menuitem">🔗 Link…</button>
+            <button id="imp-json" class="btn small" role="menuitem">🧾 Backup…</button>
+          </div>
+
+          <div id="float-actions">
+            <button id="btn-undo" class="tbtn" title="Undo (Ctrl+Z)" aria-label="Undo" disabled>↩</button>
+            <button id="btn-redo" class="tbtn" title="Redo (Ctrl+Y)" aria-label="Redo" disabled>↪</button>
+            <span class="sep" aria-hidden="true"></span>
+            <button id="btn-settings" class="btn" title="Settings — page background, size, paper, storage" aria-label="Settings">⚙</button>
+            <button id="btn-fullscreen" class="tbtn" title="Fullscreen on/off" aria-label="Fullscreen" aria-pressed="true">🗗</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    <span id="save-state" title="Local autosave status">●</span>
+  </main>
+</div>
+
+<!-- ══════════ MODALS ══════════ -->
+<div id="modal-backdrop" hidden></div>
+
+<!-- Image import preview -->
+<div id="modal-image" class="modal" role="dialog" aria-modal="true" aria-labelledby="mi-title" hidden>
+  <h3 id="mi-title">Insert image</h3>
+  <img id="mi-preview" alt="Image preview" />
+  <p class="muted" id="mi-info">—</p>
+  <div class="row end">
+    <button class="btn" data-close>Cancel</button>
+    <button id="mi-insert" class="btn primary">Insert into page</button>
+  </div>
+</div>
+
+<!-- URL import -->
+<div id="modal-url" class="modal" role="dialog" aria-modal="true" aria-labelledby="mu-title" hidden>
+  <h3 id="mu-title">Import via link</h3>
+  <label>Paste a public image or PDF URL
+    <input id="url-input" type="url" placeholder="https://example.com/photo.png" inputmode="url" />
+  </label>
+  <p class="muted">Direct file links only. If the server blocks cross-origin access (CORS), the import will fail with an explanation — browser security cannot be bypassed.</p>
+  <progress id="url-progress" hidden></progress>
+  <p id="url-error" class="error" role="alert" hidden></p>
+  <div class="row end">
+    <button class="btn" data-close>Cancel</button>
+    <button id="url-fetch" class="btn primary">Fetch &amp; import</button>
+  </div>
+</div>
+
+<!-- Settings (page size, background, paper, storage — import/export moved out) -->
+<div id="modal-settings" class="modal" role="dialog" aria-modal="true" aria-labelledby="ms-title" hidden>
+  <h3 id="ms-title">Settings</h3>
+  <h4>🌙 Appearance</h4>
+  <label class="check"><input id="set-theme" type="checkbox" /> Dark mode</label>
+  <h4>🎨 Page background color</h4>
+  <div class="row bg-row">
+    <span id="pagebg-presets" class="swatches" role="group" aria-label="Page background colors"></span>
+    <input id="set-pagebg" type="color" value="#ffffff" aria-label="Custom page background" title="Custom page background" />
+  </div>
+  <h4>⤢ Page size <span class="muted">(<span id="pg-cur-size">—</span>, current page)</span></h4>
+  <div class="row">
+    <button id="pg-portrait" class="btn small" title="Portrait — A4 794×1123">⬍ Portrait · A4</button>
+    <button id="pg-landscape" class="btn small" title="Landscape — 16:9 1123×632">⬌ Landscape · 16:9</button>
+  </div>
+  <h4>💾 Storage</h4>
+  <label class="check"><input id="set-autosave" type="checkbox" checked /> Autosave locally (IndexedDB)</label>
+  <label>Paper
+    <select id="set-paper">
+      <option value="blank">Blank</option>
+      <option value="ruled">Ruled lines</option>
+      <option value="grid">Grid</option>
+      <option value="dots">Dot grid</option>
+    </select>
+  </label>
+  <p class="muted">Storage is <strong>local to this browser only</strong> — it is not a cloud backup. Use <em>Page list → Save / Save as</em> for a portable copy. Clearing browser data erases the notebook.</p>
+  <p class="muted" id="storage-info">—</p>
+  <div class="row end">
+    <button id="btn-wipe" class="btn danger-btn">Erase saved data…</button>
+    <button class="btn" data-close>Close</button>
+  </div>
+</div>
+
+<!-- Save with file name -->
+<div id="modal-save" class="modal small" role="dialog" aria-modal="true" aria-labelledby="msv-title" hidden>
+  <h3 id="msv-title">Save file</h3>
+  <label>File name
+    <input id="save-filename" type="text" maxlength="80" placeholder="2026-10-13_17-45" />
+  </label>
+  <div class="row end">
+    <button class="btn" data-close>Cancel</button>
+    <button id="save-confirm" class="btn primary">Save</button>
+  </div>
+</div>
+
+<!-- Exit choice: save ya bina save ke -->
+<div id="modal-exit" class="modal small" role="alertdialog" aria-modal="true" aria-labelledby="mex-title" hidden>
+  <h3 id="mex-title">Save before exit?</h3>
+  <p class="muted">Your work is not saved to a file yet.</p>
+  <div class="row end">
+    <button class="btn" data-close>Cancel</button>
+    <button id="exit-discard" class="btn danger-btn">Don't save</button>
+    <button id="exit-save" class="btn primary">💾 Save</button>
+  </div>
+</div>
+
+<!-- Confirm -->
+<div id="modal-confirm" class="modal small" role="alertdialog" aria-modal="true" aria-labelledby="mc-title" hidden>
+  <h3 id="mc-title">Are you sure?</h3>
+  <p id="mc-text"></p>
+  <div class="row end">
+    <button class="btn" data-close>Cancel</button>
+    <button id="mc-ok" class="btn danger-btn">Confirm</button>
+  </div>
+</div>
+
+<div id="toast-wrap" aria-live="polite"></div>
+
+<input id="file-image" type="file" accept="image/jpeg,image/png,image/webp" hidden />
+<input id="file-pdf" type="file" accept="application/pdf" hidden />
+<input id="file-json" type="file" accept="application/json,.json" hidden />
+
+<script src="js/storage.js?v=12"></script>
+<script src="js/history.js?v=12"></script>
+<script src="js/canvas.js?v=12"></script>
+<script src="js/tools.js?v=12"></script>
+<script src="js/pages.js?v=12"></script>
+<script src="js/file-import.js?v=12"></script>
+<script src="js/pdf-handler.js?v=12"></script>
+<script src="js/file-resizer.js?v=12"></script>
+<script src="js/app.js?v=12"></script>
+<script>
+// PWA service worker — sirf http(s)/localhost par (file:// par browser allow nahi karta)
+if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
