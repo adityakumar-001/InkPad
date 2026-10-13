@@ -7,8 +7,6 @@ window.InkPad = window.InkPad || {};
   const $ = (id) => document.getElementById(id);
 
   const MIN_ZOOM = 0.25, MAX_ZOOM = 3;
-  // Window version (installed Electron app) me mouse-wheel zoom blocked hai.
-  const IS_ELECTRON = typeof navigator !== 'undefined' && /electron/i.test(navigator.userAgent || '');
   const PRESETS = ['#ffffff', '#1a1a1a', '#c81e1e', '#1a56db', '#047857', '#b7791f', '#7c3aed', '#db2777', '#0e7490'];
   const PAGE_BG_PRESETS = ['#ffffff', '#fefce8', '#fef3c7', '#eff6ff', '#f0fdf4', '#fdf2f8', '#f3f4f6', '#1f2937', '#000000'];
 
@@ -772,7 +770,6 @@ window.InkPad = window.InkPad || {};
   }
   function doExit() {
     exitAfterSave = false;
-    if (IS_ELECTRON && typeof window.close === 'function') { allowExit = true; window.close(); }
   }
 
   /* ═════════ boot / events ═════════ */
@@ -824,29 +821,17 @@ window.InkPad = window.InkPad || {};
     });
     on('btn-zoom-label', () => setZoom(1));
     on('btn-zoom-fit', fitZoom);
-    // Fullscreen button: browser me fullscreen toggle; window version (Electron,
-    // jahan fullscreen automatic hai) me yehi EXIT button hai.
-    if (IS_ELECTRON) {
-      const xb = $('btn-fullscreen');
-      if (xb) {
-        xb.textContent = '⏻';
-        xb.title = 'Exit app';
-        xb.setAttribute('aria-label', 'Exit app');
-        xb.setAttribute('aria-pressed', 'false');
-        xb.addEventListener('click', requestExit);
+    // Fullscreen button: browser me fullscreen toggle.
+    $('btn-fullscreen').addEventListener('click', async () => {
+      if (document.fullscreenElement || document.webkitFullscreenElement) {
+        try { await (document.exitFullscreen ? document.exitFullscreen() : document.webkitExitFullscreen()); }
+        catch (e) { toast('Fullscreen exit failed: ' + (e && e.message ? e.message : e), 'err'); }
+        return;
       }
-    } else {
-      $('btn-fullscreen').addEventListener('click', async () => {
-        if (document.fullscreenElement || document.webkitFullscreenElement) {
-          try { await (document.exitFullscreen ? document.exitFullscreen() : document.webkitExitFullscreen()); }
-          catch (e) { toast('Fullscreen exit failed: ' + (e && e.message ? e.message : e), 'err'); }
-          return;
-        }
-        if (fsBusy) return; // auto attempt chal rahi hai — double request par false error aata tha
-        const ok = await enterFullscreen();
-        if (!ok) toast('Fullscreen blocked: browser ne allow nahi kiya — Open-Fullscreen.bat se kholo.', 'err');
-      });
-    }
+      if (fsBusy) return; // auto attempt chal rahi hai — double request par false error aata tha
+      const ok = await enterFullscreen();
+      if (!ok) toast('Fullscreen blocked: browser ne allow nahi kiya — button se dobara try karo.', 'err');
+    });
     // Fullscreen pre-On: har interaction + tab visible/load par try (hamesha-On).
     // Exit (Esc/button) ke baad bhi agli interaction par wapas fullscreen lag jata hai.
     ['pointerdown', 'pointerup', 'keydown', 'touchend', 'dblclick'].forEach(ev => window.addEventListener(ev, autoFsTry));
@@ -855,17 +840,14 @@ window.InkPad = window.InkPad || {};
     window.addEventListener('pageshow', autoFsTry);
     document.addEventListener('fullscreenchange', () => {
       const on = !!document.fullscreenElement;
-      if (!IS_ELECTRON) {
-        const b = $('btn-fullscreen');
-        if (b) { b.textContent = on ? '🗗' : '⛶'; b.setAttribute('aria-pressed', String(on)); }
-      }
+      const b = $('btn-fullscreen');
+      if (b) { b.textContent = on ? '🗗' : '⛶'; b.setAttribute('aria-pressed', String(on)); }
       if (on) stopFsPoll(); else startFsPoll();
       if (autoFit) { fitAllToViewport(); fitZoom(); } else rerender();
     });
     $('canvas-scroll').addEventListener('wheel', (e) => {
       if (!e.ctrlKey && !e.metaKey) return;
       e.preventDefault();
-      if (IS_ELECTRON) return; // window version: mouse-wheel se zoom in/out blocked
       setZoom(state.zoom + (e.deltaY < 0 ? 0.1 : -0.1));
     }, { passive: false });
     // Import — ab center toolbar (📥) me hai, Settings me nahi.
