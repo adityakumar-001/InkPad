@@ -186,7 +186,8 @@ window.InkPad = window.InkPad || {};
     toolsApi.setSelected(null);
     state.currentIndex = i;
     $('pages-popup').hidden = true;
-    rerender();
+    if (autoFit) fitZoom(); // height 100vh lock barkarar (har page viewport-height me fit)
+    else rerender();
   }
 
   /* ═════════ tools / popup ═════════ */
@@ -438,6 +439,7 @@ window.InkPad = window.InkPad || {};
     toolsApi.setSelected(null);
     afterChange();
     markDirty();
+    if (autoFit) fitZoom(); // nayi size turant viewport-height me fit (100vh lock)
     toast(`Page ${state.currentIndex + 1} size → ${pg.size.w}×${pg.size.h}. Content kept.`);
   }
   /** Page background color — white area (paper) ka color, canvas + export me bhi lagta hai. */
@@ -472,6 +474,7 @@ window.InkPad = window.InkPad || {};
     state.currentIndex = 0;
     toolsApi.setSelected(null);
     afterChange();
+    if (autoFit) fitZoom(); // imported pages turant viewport-height me fit (100vh lock)
   }
   async function deleteSelectedPages() {
     const ids = [...state.selectedPages].filter(id => state.pages.some(p => p.id === id));
@@ -545,13 +548,12 @@ window.InkPad = window.InkPad || {};
   }
   function fitZoom() {
     const sc = $('canvas-scroll');
-    const { w: PW, h: PH } = getPageSize();
-    if (!sc || !PW || !PH) return;
-    // working area 100% hai (padding 0) — cover-fit: left+right+top+bottom
-    // poora screen use ho, koi axis khali na rahe (bina stretch, aspect same).
-    const availW = Math.max(50, sc.clientWidth);
+    const { h: PH } = getPageSize();
+    if (!sc || !PH) return;
+    // Height 100vh lock: paper ki displayed height hamesha viewport ke barabar —
+    // zoom = viewport-height / page-height (cover-fit nahi, taaki height kabhi bahar na jaye).
     const availH = Math.max(50, sc.clientHeight);
-    const z = Math.max(availW / PW, availH / PH);
+    const z = availH / PH;
     autoFit = true;
     setZoom(z, { fromFit: true, autoFit: true });
   }
@@ -845,10 +847,11 @@ window.InkPad = window.InkPad || {};
       if (on) stopFsPoll(); else startFsPoll();
       if (autoFit) { fitAllToViewport(); fitZoom(); } else rerender();
     });
+    // Mouse-wheel zoom hata diya: Ctrl+wheel ko block karo (browser zoom na bigade),
+    // lekin app zoom change mat karo — height 100vh locked rehti hai.
     $('canvas-scroll').addEventListener('wheel', (e) => {
       if (!e.ctrlKey && !e.metaKey) return;
       e.preventDefault();
-      setZoom(state.zoom + (e.deltaY < 0 ? 0.1 : -0.1));
     }, { passive: false });
     // Import — ab center toolbar (📥) me hai, Settings me nahi.
     // Page list popup me Save / Save As hai (Export ka naya naam).

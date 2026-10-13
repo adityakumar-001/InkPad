@@ -103,8 +103,11 @@ corresponding PDF feature; all drawing tools keep working offline.
   the last page) / duplicate; content preserved across navigation; autosaved.
 - Undo/redo: action-based per page (add / delete / update / clear), toolbar +
   `Ctrl+Z` / `Ctrl+Y` / `Ctrl+Shift+Z`, buttons disable correctly.
-- Zoom 25–300%: buttons, % label (click = reset), fit-to-page, `Ctrl+wheel`,
-  `Ctrl + / - / 0`. Drawing coordinates are document-space, so zoom never
+- Height locked to viewport (100vh): page display height always equals the
+  screen height on load, resize, fullscreen change, page switch and size
+  change. Mouse-wheel zoom removed (`Ctrl+wheel` is blocked, no zoom).
+  Keyboard `Ctrl + / - / 0` zoom still works (manual zoom turns auto-fit off
+  until next resize). Drawing coordinates are document-space, so zoom never
   changes artwork size.
 - Import: JPG/PNG/WebP with preview + centered insert + aspect fit; PDF
   (first 30 pages, each becomes an annotatable page background); URL import
