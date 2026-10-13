@@ -775,8 +775,8 @@ window.InkPad = window.InkPad || {};
   }
 
   /* ═════════ boot / events ═════════ */
-  // Fullscreen hamesha-On (pre-On): jab bhi windowed ho, agli interaction/
-  // visibility par turant wapas fullscreen. Fail silent (gesture rule).
+  // Fullscreen MANUAL hai: sirf ⛶ button ke click par on/off.
+  // Koi auto-fullscreen nahi (interaction/focus/visibility/poll par try nahi hota).
   // Single-guarded entry: same press par double request se false
   // "Permissions check failed" error aata tha — fsBusy wahi rokta hai.
   let fsBusy = false;
@@ -790,24 +790,6 @@ window.InkPad = window.InkPad || {};
     catch { return false; }
     finally { fsBusy = false; }
   }
-  async function tryFullscreenAuto() {
-    return enterFullscreen();
-  }
-  function autoFsTry() {
-    if (document.fullscreenElement || document.webkitFullscreenElement) return;
-    tryFullscreenAuto();
-  }
-  // Poller: gesture milte hi (pehli interaction ke 2s andar) fullscreen pakad leta hai,
-  // chahe koi event-listener miss ho jaye. Success/exit par stop/start hota hai. Fail silent.
-  let fsPoll = null;
-  function startFsPoll() {
-    if (fsPoll) return;
-    fsPoll = setInterval(() => {
-      if (document.fullscreenElement || document.webkitFullscreenElement) { stopFsPoll(); return; }
-      tryFullscreenAuto();
-    }, 2000);
-  }
-  function stopFsPoll() { if (fsPoll) { clearInterval(fsPoll); fsPoll = null; } }
   function bindTopbar() {
     $('btn-undo').addEventListener('click', doUndo);
     $('btn-redo').addEventListener('click', doRedo);
@@ -823,28 +805,23 @@ window.InkPad = window.InkPad || {};
     });
     on('btn-zoom-label', () => setZoom(1));
     on('btn-zoom-fit', fitZoom);
-    // Fullscreen button: browser me fullscreen toggle.
+    // Fullscreen button (manual toggle): click = on, dobara click = off.
     $('btn-fullscreen').addEventListener('click', async () => {
       if (document.fullscreenElement || document.webkitFullscreenElement) {
         try { await (document.exitFullscreen ? document.exitFullscreen() : document.webkitExitFullscreen()); }
         catch (e) { toast('Fullscreen exit failed: ' + (e && e.message ? e.message : e), 'err'); }
         return;
       }
-      if (fsBusy) return; // auto attempt chal rahi hai — double request par false error aata tha
+      if (fsBusy) return; // double-click guard — double request par false error aata tha
       const ok = await enterFullscreen();
       if (!ok) toast('Fullscreen blocked: browser ne allow nahi kiya — button se dobara try karo.', 'err');
     });
-    // Fullscreen pre-On: har interaction + tab visible/load par try (hamesha-On).
-    // Exit (Esc/button) ke baad bhi agli interaction par wapas fullscreen lag jata hai.
-    ['pointerdown', 'pointerup', 'keydown', 'touchend', 'dblclick'].forEach(ev => window.addEventListener(ev, autoFsTry));
-    document.addEventListener('visibilitychange', () => { if (!document.hidden) autoFsTry(); });
-    window.addEventListener('focus', autoFsTry);
-    window.addEventListener('pageshow', autoFsTry);
+    // Sirf button-state + refit: koi auto re-entry nahi (Esc se exit ke baad
+    // wapas fullscreen nahi hoga jab tak button dobara na dabaya jaye).
     document.addEventListener('fullscreenchange', () => {
       const on = !!document.fullscreenElement;
       const b = $('btn-fullscreen');
       if (b) { b.textContent = on ? '🗗' : '⛶'; b.setAttribute('aria-pressed', String(on)); }
-      if (on) stopFsPoll(); else startFsPoll();
       if (autoFit) { fitAllToViewport(); fitZoom(); } else rerender();
     });
     // Mouse-wheel zoom hata diya: Ctrl+wheel ko block karo (browser zoom na bigade),
@@ -1124,10 +1101,6 @@ window.InkPad = window.InkPad || {};
     // Pehle innerWidth>860 par setZoom(1) fit ko cancel kar deta tha.
     fitZoom();
     rerender();
-    tryFullscreenAuto(); // run par turant try (gesture na ho to silent fail)
-    startFsPoll(); // poller: pehli gesture milte hi auto fullscreen (button ki zaroorat nahi)
-    window.addEventListener('load', () => { autoFsTry(); }); // load-complete par dobara try
-    // uske baad pehli interaction (draw/click/key — fullscreen button nahi) par auto fullscreen
     let resizeTimer = null;
     const refitOnResize = () => {
       clearTimeout(resizeTimer);
