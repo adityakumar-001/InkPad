@@ -69,10 +69,9 @@ window.InkPad = window.InkPad || {};
       if (pg.background && pg.background.dataURL) {
         const img = new Image();
         img.src = pg.background.dataURL;
-        // sync draw only if cached & complete
+        // sync draw only if cached & complete — full-bleed fill (koi margin nahi)
         if (img.complete && img.naturalWidth) {
-          const k = Math.min(PW / img.naturalWidth, PH / img.naturalHeight);
-          g.drawImage(img, (PW - img.naturalWidth * k) / 2, (PH - img.naturalHeight * k) / 2, img.naturalWidth * k, img.naturalHeight * k);
+          g.drawImage(img, 0, 0, PW, PH);
         }
       }
       for (const o of pg.objects.slice(0, 400)) {

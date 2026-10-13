@@ -486,11 +486,18 @@ window.InkPad = window.InkPad || {};
     if (!ok) return;
     if (wipeAll) {
       state.pages.forEach(p => history.dropPage(p.id));
-      state.pages = [Pages.blankPage()];
+      // Naya automatic page turant 100vh: viewport-size ka, taaki scroll
+      // na karna pade aur neeche wale buttons (float-bar) turant dikhen.
+      const fresh = Pages.blankPage();
+      fresh.size = { ...viewportPageSize() };
+      state.pages = [fresh];
       state.currentIndex = 0;
       state.selectedPages.clear();
       toolsApi.setSelected(null);
       afterChange();
+      if (autoFit) fitZoom();
+      const sc0 = $('canvas-scroll');
+      if (sc0) { sc0.scrollTop = 0; sc0.scrollLeft = 0; }
       toast('All pages deleted. New blank page created.');
       return;
     }
@@ -511,12 +518,19 @@ window.InkPad = window.InkPad || {};
     if (!ok) return;
     const before = pg.objects.map(window.InkPad.clone);
     const hadBg = pg.background;
+    const prevSize = { ...Canvas.pageSizeOf(pg) };
     pg.objects = [];
     pg.background = null;
-    history.push(pg.id, { kind: 'clear', before, bg: window.InkPad.clone(hadBg) });
-    void hadBg;
+    // Clear ke baad plain page wapas 100vh viewport-size ka — bina scroll ke
+    // buttons turant dikhen. Size undo/redo me restore hota hai (history).
+    const nextSize = { ...viewportPageSize() };
+    pg.size = { ...nextSize };
+    history.push(pg.id, { kind: 'clear', before, bg: window.InkPad.clone(hadBg), prevSize, nextSize: { ...nextSize } });
     toolsApi.setSelected(null);
     afterChange();
+    if (autoFit) fitZoom();
+    const sc1 = $('canvas-scroll');
+    if (sc1) { sc1.scrollTop = 0; sc1.scrollLeft = 0; }
     toast('Page cleared. Undo (Ctrl+Z) to restore.');
   }
 
@@ -548,12 +562,14 @@ window.InkPad = window.InkPad || {};
   }
   function fitZoom() {
     const sc = $('canvas-scroll');
-    const { h: PH } = getPageSize();
-    if (!sc || !PH) return;
-    // Height 100vh lock: paper ki displayed height hamesha viewport ke barabar —
-    // zoom = viewport-height / page-height (cover-fit nahi, taaki height kabhi bahar na jaye).
-    const availH = Math.max(50, sc.clientHeight);
-    const z = availH / PH;
+    const { w: PW, h: PH } = getPageSize();
+    if (!sc || !PW || !PH) return;
+    // Fullscreen fit: jitna white area (viewport) ho, page utna hi bada —
+    // width+height dono fit (contain), na crop na scrollbar. Portrait =
+    // height-limited, landscape = width-limited. Height kabhi bahar nahi.
+    const availW = Math.max(50, sc.clientWidth || window.innerWidth || PW);
+    const availH = Math.max(50, sc.clientHeight || window.innerHeight || PH);
+    const z = Math.min(availW / PW, availH / PH);
     autoFit = true;
     setZoom(z, { fromFit: true, autoFit: true });
   }
@@ -634,8 +650,8 @@ window.InkPad = window.InkPad || {};
     if (pg.background && pg.background.dataURL) {
       try {
         const img = await Canvas.loadImage(pg.background.dataURL);
-        const k = Math.min(PW / img.naturalWidth, PH / img.naturalHeight);
-        g.drawImage(img, (PW - img.naturalWidth * k) / 2, (PH - img.naturalHeight * k) / 2, img.naturalWidth * k, img.naturalHeight * k);
+        // full-bleed fill — export me bhi margin nahi, annotation alignment same
+        g.drawImage(img, 0, 0, PW, PH);
       } catch {}
     }
     for (const o of pg.objects) {
@@ -1028,6 +1044,8 @@ window.InkPad = window.InkPad || {};
     if (pg && history.undo(state.pages, pg.id)) {
       toolsApi.setSelected(null);
       afterChange();
+      // clear-undo me size wapas badal sakta hai (PDF ↔ viewport) — refit taaki scroll na aaye
+      if (autoFit) fitZoom();
     }
   }
   function doRedo() {
@@ -1035,6 +1053,7 @@ window.InkPad = window.InkPad || {};
     if (pg && history.redo(state.pages, pg.id)) {
       toolsApi.setSelected(null);
       afterChange();
+      if (autoFit) fitZoom();
     }
   }
 

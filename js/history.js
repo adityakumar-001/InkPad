@@ -63,6 +63,7 @@ window.InkPad = window.InkPad || {};
       } else if (a.kind === 'clear') {
         page.objects = a.before.map(clone);
         if ('bg' in a) page.background = clone(a.bg);
+        if (a.prevSize) page.size = clone(a.prevSize);
       }
     }
     _applyForward(page, a) {
@@ -79,6 +80,7 @@ window.InkPad = window.InkPad || {};
       } else if (a.kind === 'clear') {
         page.objects = [];
         if ('bg' in a) page.background = null;
+        if (a.nextSize) page.size = clone(a.nextSize);
       }
     }
     _emit() { document.dispatchEvent(new CustomEvent('inkpad:history')); }

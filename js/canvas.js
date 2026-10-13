@@ -342,15 +342,16 @@ window.InkPad = window.InkPad || {};
     const { w: PW, h: PH } = pageSizeOf(page);
     const { mctx, octx } = sizeCanvases(main, overlay, zoom, PW, PH);
     drawPaperBase(mctx, paperStyle, PW, PH, paperBg);
-    // background (imported PDF page / image fitted to page)
+    // background (imported PDF page): full-bleed fill — jitna white area (page)
+    // ho utna hi PDF dikhe, koi contain-margin/letterbox nahi. Page size PDF
+    // aspect se banta hai (sizeForPdf), isliye stretch na ke barabar hai.
     if (page && page.background && page.background.dataURL) {
       const img = cachedImage(page.background.dataURL);
       if (img) {
-        // preserve proportions: contain within page
-        const s = Math.min(PW / img.naturalWidth, PH / img.naturalHeight);
-        const dw = img.naturalWidth * s, dh = img.naturalHeight * s;
         mctx.save();
-        mctx.drawImage(img, (PW - dw) / 2, (PH - dh) / 2, dw, dh);
+        mctx.imageSmoothingEnabled = true;
+        mctx.imageSmoothingQuality = 'high';
+        mctx.drawImage(img, 0, 0, PW, PH);
         mctx.restore();
       }
     }

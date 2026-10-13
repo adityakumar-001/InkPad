@@ -21,15 +21,28 @@ window.InkPad = window.InkPad || {};
   }
 
   /** Page size matching the PDF page aspect (long side 1123):
-   *  A4 portrait → 794×1123, A4 landscape → 1123×794, 16:9 → 1123×632. */
+   *  A4 portrait → 794×1123, A4 landscape → 1123×794, 16:9 → 1123×632.
+   *  Aspect hamesha preserve hota hai — clamp bhi uniform scale se, taaki
+   *  background fill me koi margin/stretch na aaye. */
   function sizeForPdf(imgW, imgH) {
     const C = window.InkPad.Canvas;
-    const LONG = 1123;
+    const LONG = 1123, MIN_SIDE = 200, MAX_SIDE = 2000;
     const aspect = (imgW > 0 && imgH > 0) ? imgW / imgH : 794 / 1123;
     let w, h;
-    if (aspect >= 1) { w = LONG; h = Math.round(LONG / aspect); }
-    else { h = LONG; w = Math.round(LONG * aspect); }
-    return C.normSize({ w, h });
+    if (aspect >= 1) { w = LONG; h = LONG / aspect; }
+    else { h = LONG; w = LONG * aspect; }
+    // uniform clamp — w/h alag-alag clamp karne se aspect bigadta tha
+    // aur contain-fill me margin dikhta tha (landscape bug).
+    // Pehle min-side (chhota PDF), phir max-side (memory) — aspect intact.
+    if (Math.min(w, h) < MIN_SIDE) {
+      const k = MIN_SIDE / Math.min(w, h);
+      w *= k; h *= k;
+    }
+    if (Math.max(w, h) > MAX_SIDE) {
+      const k = MAX_SIDE / Math.max(w, h);
+      w *= k; h *= k;
+    }
+    return C.normSize({ w: Math.round(w), h: Math.round(h) });
   }
 
   async function importPdfBytes(ctx, arrayBuffer, name) {
