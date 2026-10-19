@@ -9,7 +9,7 @@
 <link rel="manifest" href="manifest.json" />
 <link rel="icon" type="image/png" href="assets/icon-192.png" />
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
-<link rel="stylesheet" href="css/style.css?v=12" />
+<link rel="stylesheet" href="css/style.css?v=25" />
 <!-- PDF.js (rendering) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
@@ -23,7 +23,7 @@
 <body>
 <a class="skip-link" href="#workspace">Skip to workspace</a>
 
-<!-- ══════════ MAIN LAYOUT ══════════ -->
+<!-- â•â•â•â•â•â•â•â•â•â• MAIN LAYOUT â•â•â•â•â•â•â•â•â•â• -->
 <div id="layout">
 
 
@@ -38,30 +38,44 @@
           <div id="tool-popup" hidden role="dialog" aria-label="Tool options">
             <div class="popup-head">
               <strong id="popup-title">Pen options</strong>
-              <button id="popup-close" type="button" class="tbtn" aria-label="Close options" title="Close (click canvas to close)">×</button>
+              <button id="popup-close" type="button" class="tbtn" aria-label="Close options" title="Close (click canvas to close)"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
             </div>
             <div id="popup-shapes" class="pop-block" hidden>
               <div class="tool-divider"><span>2D Shapes</span></div>
               <div class="tool-group shapes-grid" role="toolbar" aria-label="2D shapes">
-                <button class="tool shape-btn" data-tool="shape-line" title="Line" aria-label="Line">╱</button>
-                <button class="tool shape-btn" data-tool="shape-arrow" title="Arrow" aria-label="Arrow">→</button>
-                <button class="tool shape-btn" data-tool="shape-rect" title="Rectangle" aria-label="Rectangle">▭</button>
-                <button class="tool shape-btn" data-tool="shape-roundrect" title="Rounded rectangle" aria-label="Rounded rectangle">▢</button>
-                <button class="tool shape-btn" data-tool="shape-circle" title="Circle" aria-label="Circle">○</button>
-                <button class="tool shape-btn" data-tool="shape-ellipse" title="Ellipse" aria-label="Ellipse">⬭</button>
-                <button class="tool shape-btn" data-tool="shape-triangle" title="Triangle" aria-label="Triangle">△</button>
-                <button class="tool shape-btn" data-tool="shape-polygon" title="Polygon (hexagon)" aria-label="Polygon">⬡</button>
-                <button class="tool shape-btn" data-tool="shape-star" title="Star" aria-label="Star">★</button>
-                <button class="tool shape-btn" data-tool="shape-freeform" title="Freeform (double-click to finish)" aria-label="Freeform">〰</button>
+                <button class="tool shape-btn" data-tool="shape-line" title="Line" aria-label="Line"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5"/><circle cx="5" cy="19" r="1.4"/><circle cx="19" cy="5" r="1.4"/></svg></button>
+                <button class="tool shape-btn" data-tool="shape-arrow" title="Arrow" aria-label="Arrow"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 17.5 6.5"/><path d="M12.5 6.5h5v5"/></svg></button>
+                <button class="tool shape-btn" data-tool="shape-rect" title="Rectangle" aria-label="Rectangle"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6.5" width="16" height="11" rx="1"/></svg></button>
+                <button class="tool shape-btn" data-tool="shape-roundrect" title="Rounded rectangle" aria-label="Rounded rectangle"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6.5" width="16" height="11" rx="4"/></svg></button>
+                <button class="tool shape-btn" data-tool="shape-circle" title="Circle" aria-label="Circle"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7.5"/></svg></button>
+                <button class="tool shape-btn" data-tool="shape-ellipse" title="Ellipse" aria-label="Ellipse"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="12" rx="8.5" ry="5.5"/></svg></button>
+                <button class="tool shape-btn" data-tool="shape-triangle" title="Triangle" aria-label="Triangle"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4.5 20 19H4z"/></svg></button>
+                <button class="tool shape-btn" data-tool="shape-polygon" title="Polygon (hexagon)" aria-label="Polygon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l7.4 4.27v8.46L12 20.5l-7.4-4.27V7.77z"/></svg></button>
+                <button class="tool shape-btn" data-tool="shape-star" title="Star" aria-label="Star"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.8l2.47 5 5.53.8-4 3.9.94 5.5L12 16.4l-4.94 2.6.94-5.5-4-3.9 5.53-.8z"/></svg></button>
+                <button class="tool shape-btn" data-tool="shape-freeform" title="Freeform (double-click to finish)" aria-label="Freeform"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 14.5c2.8-7 5.6-7 8.4 0s5.6 7 8.4 0"/></svg></button>
+                <button class="tool shape-btn" data-tool="shape-diamond" title="Diamond (rhombus)" aria-label="Diamond"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5 20.5 12 12 20.5 3.5 12z"/></svg></button>
+                <button class="tool shape-btn" data-tool="shape-pentagon" title="Pentagon" aria-label="Pentagon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.4l8 5.9-3 9.3H7L4 9.3z"/></svg></button>
+                <button class="tool shape-btn" data-tool="shape-parallelogram" title="Parallelogram" aria-label="Parallelogram"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6.5h12L16 17.5H4z"/></svg></button>
+                <button class="tool shape-btn" data-tool="shape-trapezoid" title="Trapezoid" aria-label="Trapezoid"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 6.5h9L21 17.5H3z"/></svg></button>
+                <button class="tool shape-btn" data-tool="shape-cross" title="Cross (plus)" aria-label="Cross"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 4h5v5.5H20v5h-5.5V20h-5v-5.5H4v-5h5.5z"/></svg></button>
+                <button class="tool shape-btn" data-tool="shape-heart" title="Heart" aria-label="Heart"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.2c-1.1-.8-7.5-5-7.5-10A4.5 4.5 0 0 1 12 7.2a4.5 4.5 0 0 1 7.5 3c0 5-6.4 9.2-7.5 10z"/></svg></button>
+                <button class="tool shape-btn" data-tool="shape-cloud" title="Cloud" aria-label="Cloud"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18.5a4 4 0 0 1-.6-7.9A5.5 5.5 0 0 1 17 9.4a3.9 3.9 0 0 1-.4 9.1z"/></svg></button>
+                <button class="tool shape-btn" data-tool="shape-speech" title="Speech bubble" aria-label="Speech bubble"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-6.5L7.5 20v-3H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/></svg></button>
+                <button class="tool shape-btn" data-tool="shape-semicircle" title="Semicircle" aria-label="Semicircle"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17.5a8 8 0 0 1 16 0z"/></svg></button>
+                <button class="tool shape-btn" data-tool="shape-ring" title="Ring (donut)" aria-label="Ring"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.4"/></svg></button>
               </div>
               <div class="tool-divider"><span>3D-style</span></div>
               <div class="tool-group shapes-grid" role="toolbar" aria-label="3D style shapes">
-                <button class="tool shape-btn" data-tool="shape-cube" title="Cube (3D-style, shaded)" aria-label="Cube">⬢</button>
-                <button class="tool shape-btn" data-tool="shape-cuboid" title="Cuboid (3D-style)" aria-label="Cuboid">▤</button>
-                <button class="tool shape-btn" data-tool="shape-cylinder" title="Cylinder (3D-style)" aria-label="Cylinder">🛢</button>
-                <button class="tool shape-btn" data-tool="shape-cone" title="Cone (3D-style)" aria-label="Cone">🔻</button>
-                <button class="tool shape-btn" data-tool="shape-sphere" title="Sphere (3D-style gradient)" aria-label="Sphere">●</button>
-                <button class="tool shape-btn" data-tool="shape-pyramid" title="Pyramid (3D-style)" aria-label="Pyramid">▲</button>
+                <button class="tool shape-btn" data-tool="shape-cube" title="Cube (3D-style, shaded)" aria-label="Cube"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6 19 7.6v8.8l-7 4-7-4V7.6z"/><path d="M12 3.6v8.4"/><path d="M12 12l7-4.4"/><path d="M12 12l-7-4.4"/></svg></button>
+                <button class="tool shape-btn" data-tool="shape-cuboid" title="Cuboid (3D-style)" aria-label="Cuboid"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="8.5" width="12" height="8.5" rx="1"/><path d="M4 8.5 8.5 4.5H20v8.5L16 17"/><path d="M16 8.5 20 4.5"/></svg></button>
+                <button class="tool shape-btn" data-tool="shape-cylinder" title="Cylinder (3D-style)" aria-label="Cylinder"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="6" rx="6.5" ry="2.8"/><path d="M5.5 6v12"/><path d="M18.5 6v12"/><path d="M5.5 18c0 1.5 2.9 2.8 6.5 2.8s6.5-1.3 6.5-2.8"/></svg></button>
+                <button class="tool shape-btn" data-tool="shape-cone" title="Cone (3D-style)" aria-label="Cone"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5 19 16.5H5z"/><ellipse cx="12" cy="16.5" rx="7" ry="2.8"/></svg></button>
+                <button class="tool shape-btn" data-tool="shape-sphere" title="Sphere (3D-style gradient)" aria-label="Sphere"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><ellipse cx="12" cy="12" rx="8" ry="3.4"/><path d="M12 4v16"/></svg></button>
+                <button class="tool shape-btn" data-tool="shape-pyramid" title="Pyramid (3D-style)" aria-label="Pyramid"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5 20 19H4z"/><path d="M12 3.5V19"/></svg></button>
+                <button class="tool shape-btn" data-tool="shape-prism" title="Triangular prism (3D-style)" aria-label="Triangular prism"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 6.5 15.5 16.5H2.5z"/><path d="M9.5 6.5l4-2.5L20 13.5l-4.5 3"/><path d="M2.5 16.5l4-2.5"/></svg></button>
+                <button class="tool shape-btn" data-tool="shape-frustum" title="Frustum (3D-style)" aria-label="Frustum"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6.5h6l3 11H6z"/><ellipse cx="12" cy="6.5" rx="3" ry="1.5"/><path d="M6 17.5c0 1 2.7 1.8 6 1.8s6-.8 6-1.8"/></svg></button>
+                <button class="tool shape-btn" data-tool="shape-hemisphere" title="Hemisphere (3D-style)" aria-label="Hemisphere"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 15a7.5 7.5 0 0 1 15 0z"/><ellipse cx="12" cy="15" rx="7.5" ry="2.6"/></svg></button>
+                <button class="tool shape-btn" data-tool="shape-torus" title="Torus / donut (3D-style)" aria-label="Torus"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="12" rx="8.5" ry="6"/><ellipse cx="12" cy="12" rx="3.6" ry="2.3"/></svg></button>
               </div>
             </div>
             <div id="props-pen" class="prop-block">
@@ -76,17 +90,18 @@
                   <label for="prop-width">Thickness: <output id="prop-width-val" for="prop-width">4 px</output></label>
                   <input id="prop-width" type="range" min="1" max="15" value="4" step="1" aria-label="Stroke thickness" />
                 </div>
-                <div class="row two">
-                  <div class="prop-row"><label for="prop-min">Min</label><input id="prop-min" type="number" min="1" max="15" value="1" aria-label="Minimum thickness" /></div>
-                  <div class="prop-row"><label for="prop-max">Max</label><input id="prop-max" type="number" min="1" max="15" value="15" aria-label="Maximum thickness" /></div>
-                </div>
-                <div class="opacity-box">
-                  <div class="opacity-title">Opacity preview</div>
-                  <div class="prop-row opacity-row">
-                    <label for="prop-opacity">Opacity: <output id="prop-opacity-val" for="prop-opacity">100%</output></label>
-                    <input id="prop-opacity" type="range" min="10" max="100" value="100" step="5" aria-label="Stroke opacity" />
+                <div id="pencil-extra">
+                  <div class="tool-divider"><span>Pencil tip · HB grade</span></div>
+                  <div id="tip-grid" class="tip-grid" role="toolbar" aria-label="Pencil tips HB1 to HB8"></div>
+                  <p class="muted">Each tip has a fixed thickness — the line does not get thicker or thinner while writing.</p>
+                  <div class="tool-divider"><span>Style</span></div>
+                  <div id="style-grid" class="style-grid" role="toolbar" aria-label="Pencil styles">
+                    <button class="tool style-btn" type="button" data-pstyle="pencil" title="Graphite — classic grainy HB pencil" aria-label="Graphite pencil" aria-pressed="true"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 19.5l1-4L16.8 4.2a1.8 1.8 0 012.9 0l.1.1a1.8 1.8 0 010 2.9L8.5 18.5l-4 1z"/><path d="M14.8 6.2l3 3"/></svg><span>Graphite</span></button>
+                    <button class="tool style-btn" type="button" data-pstyle="soft" title="Soft — smooth dark strokes for shading" aria-label="Soft pencil" aria-pressed="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.2 5.8a5.6 5.6 0 0 0-8 0L6 12v6h6l6.2-6.2a5.6 5.6 0 0 0 0-6z"/><path d="M16 8 3 21"/><path d="M17.5 15H9"/></svg><span>Soft</span></button>
+                    <button class="tool style-btn" type="button" data-pstyle="sketch" title="Sketch — light, loose dashed strokes" aria-label="Sketch pencil" aria-pressed="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.6 7.6"/><circle cx="11" cy="11" r="2"/></svg><span>Sketch</span></button>
+                    <button class="tool style-btn" type="button" data-pstyle="text" title="Typed — write the words on the page; after you stop writing for 2.5 seconds they are recognized and become computer text in Nirmala UI. Fix mistakes in the box, then press Enter." aria-label="Typed text" aria-pressed="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/></svg><span>Typed</span></button>
                   </div>
-                  <div id="stroke-preview-wrap" aria-hidden="true"><canvas id="stroke-preview" width="220" height="52"></canvas></div>
+                  <p class="muted">Typed: write the whole word/sentence on the page. After you stop writing for 2.5 seconds the handwriting is read and placed as computer text in Nirmala UI (English letters and numbers — write clearly). A box opens so you can fix mistakes, then press Enter.</p>
                 </div>
             </div>
 
@@ -103,70 +118,93 @@
             </div>
 
           </div>
-          <!-- STUCK inside the white page: 10px margins, fixed on zoom in/out -->
-          <div id="float-bar">
-            <div id="float-pages">
-            <button class="btn nav-btn" data-nav="prev" title="Previous page (←)" aria-label="Previous page">‹</button>
-            <button id="btn-add-page" class="btn nav-btn" title="Add new page" aria-label="Add new page">+</button>
-            <button class="btn nav-btn" data-nav="next" title="Next page (→)" aria-label="Next page">›</button>
-            <button id="btn-pages" class="btn" aria-haspopup="true" aria-expanded="false" title="Page list — open thumbnails"><span class="h-lines" aria-hidden="true"><i></i><i></i><i></i></span><span id="pages-count">1/1</span></button>
-            <div id="pages-popup" hidden role="dialog" aria-label="Pages">
-              <section id="pages-panel" aria-label="Pages">
-                <div class="pages-head">
-                  <h2>Pages</h2>
-                  <div class="row">
-                    <button id="btn-sel-all" class="btn small" title="Select / deselect all pages">☑ All</button>
-                    <button id="btn-del-selected" class="btn small danger-btn" title="Delete ticked pages" disabled>🗑 Sel</button>
-                  </div>
-                </div>
-                <div id="thumbs" role="listbox" aria-label="Page thumbnails"></div>
-                <div class="save-block">
-                  <div class="tool-divider"><span>Save</span></div>
-                  <div class="row save-row">
-                    <button id="btn-save" class="btn small primary" title="Save current page as PNG">💾 Save</button>
-                    <button id="btn-save-as" class="btn small" title="Save as — choose format" aria-haspopup="true" aria-expanded="false">📑 Save as…</button>
-                  </div>
-                  <div id="saveas-options" hidden>
-                    <button id="saveas-pdf" class="btn small">📕 PDF (all pages)</button>
-                    <button id="saveas-png" class="btn small">🖼 PNG (this page)</button>
-                  </div>
-                </div>
-              </section>
+          <!-- RGB color plate (opens from the selection's color button) -->
+          <div id="rgb-popup" hidden role="dialog" aria-label="Color plate (RGB picker)">
+            <div class="popup-head">
+              <strong>Color plate</strong>
+              <button id="rgb-close" type="button" class="tbtn" aria-label="Close color plate" title="Close"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+            </div>
+            <div class="rgb-head">
+              <span id="rgb-preview" class="rgb-preview" aria-hidden="true"></span>
+              <output id="rgb-hex" for="rgb-r rgb-g rgb-b">#1a1a1a</output>
+            </div>
+            <label class="rgb-row"><span>R</span><input id="rgb-r" type="range" min="0" max="255" value="26" aria-label="Red" /><output id="rgb-rv" for="rgb-r">26</output></label>
+            <label class="rgb-row"><span>G</span><input id="rgb-g" type="range" min="0" max="255" value="26" aria-label="Green" /><output id="rgb-gv" for="rgb-g">26</output></label>
+            <label class="rgb-row"><span>B</span><input id="rgb-b" type="range" min="0" max="255" value="26" aria-label="Blue" /><output id="rgb-bv" for="rgb-b">26</output></label>
+            <div class="row end">
+              <button id="rgb-cancel" class="btn" type="button">Cancel</button>
+              <button id="rgb-apply" class="btn primary" type="button">Apply</button>
             </div>
           </div>
+          <!-- STUCK inside the white page: 10px margins, fixed on zoom in/out.
+               Button groups are span containers and the gaps are click-through
+               (pointer-events) so the remaining white area stays usable. -->
+          <div id="float-bar">
+            <span id="float-pages">
+            <button class="btn nav-btn" data-nav="prev" title="Previous page (â†)" aria-label="Previous page"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5 8 12l6.5 6.5"/></svg></button>
+            <button id="btn-add-page" class="btn nav-btn" title="Add new page" aria-label="Add new page"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+            <button class="btn nav-btn" data-nav="next" title="Next page (â†’)" aria-label="Next page"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5.5 16 12l-6.5 6.5"/></svg></button>
+            <button id="btn-pages" class="btn" aria-haspopup="true" aria-expanded="false" title="Page list — open thumbnails"><span class="h-lines" aria-hidden="true"><i></i><i></i><i></i></span><span id="pages-count">1/1</span></button>
+            </span>
 
-          <div id="float-toolbar" role="toolbar" aria-label="Drawing tools">
-            <button class="tool icon-only active" data-tool="pencil" title="Pencil (P)" aria-label="Pencil" aria-pressed="true">✏</button>
-            <button class="tool icon-only" data-tool="eraser" title="Eraser (E)" aria-label="Eraser" aria-pressed="false">🧽</button>
-            <button class="tool icon-only" data-tool="select" title="Select / Move / Resize (V)" aria-label="Select" aria-pressed="false">➤</button>
-            <button id="btn-shapes" class="tool icon-only" title="Shapes — click to open all 2D & 3D shapes" aria-label="Shapes" aria-pressed="false" aria-haspopup="true"><span id="shapes-glyph" aria-hidden="true">▭</span></button>
-            <button id="btn-clear-page" class="tool icon-only danger" title="Clear current page (asks first)" aria-label="Clear page">🗑</button>
-            <button id="btn-import" class="tool icon-only" title="Import — image, PDF, link, backup" aria-label="Import" aria-haspopup="true" aria-expanded="false">📥</button>
-          </div>
+          <span id="float-toolbar" role="toolbar" aria-label="Drawing tools">
+            <button class="tool icon-only active" data-tool="pencil" title="Pencil (P)" aria-label="Pencil" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 19.5l1-4L16.8 4.2a1.8 1.8 0 012.9 0l.1.1a1.8 1.8 0 010 2.9L8.5 18.5l-4 1z"/><path d="M14.8 6.2l3 3"/></svg></button>
+            <button class="tool icon-only" data-tool="highlighter" title="Highlighter (H) — covers only the marked text line" aria-label="Highlighter" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.5 3.5l8 8-6.5 6.5-8-8 6.5-6.5z"/><path d="M6 12l-3.5 3.5V19h3.5l3.5-3.5"/><path d="M8 21h13"/></svg></button>
+            <button class="tool icon-only" data-tool="eraser" title="Eraser (E) — removes handwriting only" aria-label="Eraser" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.6 3.9l4.5 4.5a2 2 0 010 2.8l-7.7 7.7H7.3l-3.9-3.9a2 2 0 010-2.8l9.4-9.4a2 2 0 012.8 0z"/><path d="M7.5 12.5l4 4"/><path d="M6 21h15"/></svg></button>
+            <button class="tool icon-only" data-tool="select" title="Select / Move / Resize (V)" aria-label="Select" aria-pressed="false"><svg viewBox="0 0 24 24" class="solid" aria-hidden="true"><path d="M5 3l14 8.2-6.1 1.6L9.6 19 5 3z"/></svg></button>
+            <button class="tool icon-only" data-tool="pan" title="Move page — drag to pan in any direction (M, middle-mouse drag, Space+drag)" aria-label="Move page" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 11V6.5a1.5 1.5 0 0 0-3 0V11"/><path d="M15 10.5V4.5a1.5 1.5 0 0 0-3 0V11"/><path d="M12 10.5V5.5a1.5 1.5 0 0 0-3 0V12"/><path d="M9 11V8.5a1.5 1.5 0 0 0-3 0V14"/><path d="M6 14a6 6 0 0 0 6 6h2a6 6 0 0 0 6-6v-3"/></svg></button>
+            <button id="btn-shapes" class="tool icon-only" title="Shapes — click to open all 2D &amp; 3D shapes" aria-label="Shapes" aria-pressed="false" aria-haspopup="true"><span id="shapes-glyph" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><rect x="4" y="6.5" width="16" height="11" rx="1"/></svg></span></button>
+            <button id="btn-clear-page" class="tool icon-only danger" title="Clear page — removes handwriting/shapes, keeps uploaded files" aria-label="Clear page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16"/><path d="M9.5 7V4.5h5V7"/><path d="M6.5 7l1 12.5h9L17.5 7"/><path d="M10 10.5v6M14 10.5v6"/></svg></button>
+            <button id="btn-import" class="tool icon-only" title="Import — image, PDF, link, backup" aria-label="Import" aria-haspopup="true" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5V14"/><path d="M8 10.5l4 4 4-4"/><path d="M4.5 16.5v3.5h15v-3.5"/></svg></button>
+          </span>
 
-          <div id="import-popup" hidden role="menu" aria-label="Import options">
-            <button id="imp-image" class="btn small" role="menuitem">🖼 Image…</button>
-            <button id="imp-pdf" class="btn small" role="menuitem">📄 PDF…</button>
-            <button id="imp-url" class="btn small" role="menuitem">🔗 Link…</button>
-            <button id="imp-json" class="btn small" role="menuitem">🧾 Backup…</button>
-          </div>
+          <span id="import-popup" hidden role="menu" aria-label="Import options">
+            <button id="imp-image" class="btn small" role="menuitem"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><circle cx="9" cy="10" r="1.6"/><path d="M4.5 17.5 9.5 12l3.5 3.5 2.5-2.5 4 4.5"/></svg>Image…</button>
+            <button id="imp-pdf" class="btn small" role="menuitem"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3v5h5"/><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5z"/><path d="M9 13h6M9 17h6"/></svg>PDF…</button>
+            <button id="imp-url" class="btn small" role="menuitem"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M10.5 13.5a4 4 0 0 0 5.7 0l3-3a4 4 0 1 0-5.7-5.7l-1.5 1.5"/><path d="M13.5 10.5a4 4 0 0 0-5.7 0l-3 3a4 4 0 1 0 5.7 5.7l1.5-1.5"/></svg>Link…</button>
+            <button id="imp-json" class="btn small" role="menuitem"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4" width="17" height="5" rx="1.5"/><path d="M5.5 9v9.5A1.5 1.5 0 0 0 7 20h10a1.5 1.5 0 0 0 1.5-1.5V9"/><path d="M10 13h4"/></svg>Backup…</button>
+          </span>
 
-          <div id="float-actions">
-            <button id="btn-undo" class="tbtn" title="Undo (Ctrl+Z)" aria-label="Undo" disabled>↩</button>
-            <button id="btn-redo" class="tbtn" title="Redo (Ctrl+Y)" aria-label="Redo" disabled>↪</button>
+          <span id="float-actions">
+            <button id="btn-undo" class="tbtn" title="Undo (Ctrl+Z)" aria-label="Undo" disabled><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5A5.5 5.5 0 0 1 20 14.5V20"/></svg></button>
+            <button id="btn-redo" class="tbtn" title="Redo (Ctrl+Y)" aria-label="Redo" disabled><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 14l5-5-5-5"/><path d="M20 9H9.5A5.5 5.5 0 0 0 4 14.5V20"/></svg></button>
             <span class="sep" aria-hidden="true"></span>
-            <button id="btn-settings" class="btn" title="Settings — page background, size, paper, storage" aria-label="Settings">⚙</button>
-            <button id="btn-fullscreen" class="tbtn" title="Fullscreen on/off" aria-label="Fullscreen" aria-pressed="false">⛶</button>
+            <button id="btn-settings" class="btn" title="Settings — page background, size, paper, storage" aria-label="Settings"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.01a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+            <button id="btn-fullscreen" class="tbtn" title="Fullscreen on/off" aria-label="Fullscreen" aria-pressed="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H5.5A2.5 2.5 0 0 0 3 5.5V8"/><path d="M16 3h2.5A2.5 2.5 0 0 1 21 5.5V8"/><path d="M8 21H5.5A2.5 2.5 0 0 1 3 18.5V16"/><path d="M16 21h2.5a2.5 2.5 0 0 0 2.5-2.5V16"/></svg></button>
+          </span>
+
+          <div id="pages-popup" hidden role="dialog" aria-label="Pages">
+            <section id="pages-panel" aria-label="Pages">
+              <div class="pages-head">
+                <h2>Pages</h2>
+                <div class="row">
+                  <button id="btn-sel-all" class="btn small" title="Select / deselect all pages" aria-pressed="false"><svg class="ico chk-off" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2.5"/></svg><svg class="ico chk-on" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2.5"/><path d="M8 12.2l2.6 2.6L16 9.2"/></svg><span>All</span></button>
+                  <button id="btn-del-selected" class="btn small danger-btn" title="Delete ticked pages" disabled><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span id="del-sel-label">Sel</span></button>
+                </div>
+              </div>
+              <div id="thumbs" role="listbox" aria-label="Page thumbnails"></div>
+              <div class="save-block">
+                <div class="tool-divider"><span>Save</span></div>
+                <div class="row save-row">
+                  <button id="btn-save" class="btn small primary" title="Save current page as PNG"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11"/><path d="M7.5 11l4.5 4.5 4.5-4.5"/><path d="M4.5 19.5h15"/></svg>Save</button>
+                  <button id="btn-save-as" class="btn small" title="Save as — choose format" aria-haspopup="true" aria-expanded="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3v5h5"/><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5z"/></svg>Save as…</button>
+                </div>
+                <div id="saveas-options" hidden>
+                  <button id="saveas-pdf" class="btn small"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3v5h5"/><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5z"/><path d="M9 13h6M9 17h6"/></svg>PDF (all pages)</button>
+                  <button id="saveas-png" class="btn small"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><circle cx="9" cy="10" r="1.6"/><path d="M4.5 17.5 9.5 12l3.5 3.5 2.5-2.5 4 4.5"/></svg>PNG (this page)</button>
+                </div>
+              </div>
+            </section>
           </div>
-        </div>
+          </div>
       </div>
     </div>
     </div>
-    <span id="save-state" title="Local autosave status">●</span>
+    <span id="save-state" title="Local autosave status">â—</span>
   </main>
 </div>
 
-<!-- ══════════ MODALS ══════════ -->
+<!-- â•â•â•â•â•â•â•â•â•â• MODALS â•â•â•â•â•â•â•â•â•â• -->
 <div id="modal-backdrop" hidden></div>
 
 <!-- Image import preview -->
@@ -198,19 +236,14 @@
 <!-- Settings (page size, background, paper, storage — import/export moved out) -->
 <div id="modal-settings" class="modal" role="dialog" aria-modal="true" aria-labelledby="ms-title" hidden>
   <h3 id="ms-title">Settings</h3>
-  <h4>🌙 Appearance</h4>
+  <h4>Appearance</h4>
   <label class="check"><input id="set-theme" type="checkbox" /> Dark mode</label>
-  <h4>🎨 Page background color</h4>
+  <h4>Page background color</h4>
   <div class="row bg-row">
     <span id="pagebg-presets" class="swatches" role="group" aria-label="Page background colors"></span>
     <input id="set-pagebg" type="color" value="#ffffff" aria-label="Custom page background" title="Custom page background" />
   </div>
-  <h4>⤢ Page size <span class="muted">(<span id="pg-cur-size">—</span>, current page)</span></h4>
-  <div class="row">
-    <button id="pg-portrait" class="btn small" title="Portrait — A4 794×1123">⬍ Portrait · A4</button>
-    <button id="pg-landscape" class="btn small" title="Landscape — 16:9 1123×632">⬌ Landscape · 16:9</button>
-  </div>
-  <h4>💾 Storage</h4>
+  <h4>Storage</h4>
   <label class="check"><input id="set-autosave" type="checkbox" checked /> Autosave locally (IndexedDB)</label>
   <label>Paper
     <select id="set-paper">
@@ -220,8 +253,6 @@
       <option value="dots">Dot grid</option>
     </select>
   </label>
-  <p class="muted">Storage is <strong>local to this browser only</strong> — it is not a cloud backup. Use <em>Page list → Save / Save as</em> for a portable copy. Clearing browser data erases the notebook.</p>
-  <p class="muted" id="storage-info">—</p>
   <div class="row end">
     <button id="btn-wipe" class="btn danger-btn">Erase saved data…</button>
     <button class="btn" data-close>Close</button>
@@ -247,7 +278,7 @@
   <div class="row end">
     <button class="btn" data-close>Cancel</button>
     <button id="exit-discard" class="btn danger-btn">Don't save</button>
-    <button id="exit-save" class="btn primary">💾 Save</button>
+    <button id="exit-save" class="btn primary">Save</button>
   </div>
 </div>
 
@@ -267,15 +298,14 @@
 <input id="file-pdf" type="file" accept="application/pdf" hidden />
 <input id="file-json" type="file" accept="application/json,.json" hidden />
 
-<script src="js/storage.js?v=14"></script>
-<script src="js/history.js?v=14"></script>
-<script src="js/canvas.js?v=14"></script>
-<script src="js/tools.js?v=14"></script>
-<script src="js/pages.js?v=14"></script>
-<script src="js/file-import.js?v=14"></script>
-<script src="js/pdf-handler.js?v=14"></script>
-<script src="js/file-resizer.js?v=14"></script>
-<script src="js/app.js?v=14"></script>
+<script src="js/storage.js?v=25"></script>
+<script src="js/history.js?v=25"></script>
+<script src="js/canvas.js?v=25"></script>
+<script src="js/tools.js?v=25"></script>
+<script src="js/pages.js?v=25"></script>
+<script src="js/file-import.js?v=25"></script>
+<script src="js/pdf-handler.js?v=25"></script>
+<script src="js/app.js?v=25"></script>
 <script>
 // PWA service worker — sirf http(s)/localhost par (file:// par browser allow nahi karta)
 if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
